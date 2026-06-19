@@ -1,8 +1,12 @@
-# Block all bots by default
-User-agent: *
-Disallow: /
+# Quillosofi — marketing site
+# Goal: be discoverable by search engines & social previews,
+# while still blocking AI-training scrapers.
 
-# --- Block AI training bots explicitly ---
+# --- Allow all general crawlers by default ---
+User-agent: *
+Allow: /
+
+# --- Block AI training / scraping bots explicitly ---
 User-agent: GPTBot
 Disallow: /
 
@@ -48,14 +52,4 @@ Disallow: /
 User-agent: TerracottaBot
 Disallow: /
 
-# --- Allow search crawlers only ---
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-Sitemap: https://thehibrythiansaga.com/sitemap.xml
+Sitemap: https://quillosofi.com/sitemap.xml
