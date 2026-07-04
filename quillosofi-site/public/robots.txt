@@ -58,4 +58,4 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-Sitemap: https://www.quillosofi.com/sitemap.xml
+Sitemap: https://www.quillosofi.com/sitemap-index.xml
