@@ -1,0 +1,62 @@
+---
+const githubUrl = 'https://github.com/TheAlarklynZone/Quillosofi';
+---
+
+<section id="download">
+  <div class="section-inner">
+    <div class="download-rings" aria-hidden="true"><div class="ring ring-1"></div><div class="ring ring-2"></div></div>
+    <div class="download-inner reveal">
+      <div class="download-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg>
+      </div>
+      <h2>Download Quillosofi</h2>
+      <p class="download-sub">Free. Open source. No account required.</p>
+      <p class="download-detail" id="release-info">Currently in active alpha &mdash; loading latest version&hellip;</p>
+      <div class="download-ctas">
+        <a id="download-btn" href={`${githubUrl}/releases/latest`} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">Download for Windows / macOS</a>
+        <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"></path></svg>
+          Source on GitHub
+        </a>
+      </div>
+      <div class="chalk-rule" style="max-width:280px;margin:0 auto 16px"></div>
+      <p class="download-support">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        Quillosofi is free forever. <a href="https://ko-fi.com/alarkiusej" target="_blank" rel="noopener noreferrer">Ko-Fi</a> keeps the domain and hosting alive.
+      </p>
+      <p class="download-stack">Electron &middot; React 18 &middot; Vite &middot; Tailwind &middot; Tiptap</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  async function fetchLatestRelease() {
+    try {
+      const res = await fetch('https://api.github.com/repos/TheAlarklynZone/Quillosofi/releases/latest', {
+        headers: { 'Accept': 'application/vnd.github+json' },
+      });
+      if (!res.ok) throw new Error('API error');
+      const data = await res.json();
+      const tag = data.tag_name || '';
+      const htmlUrl = data.html_url || 'https://github.com/TheAlarklynZone/Quillosofi/releases/latest';
+
+      const infoEl = document.getElementById('release-info');
+      if (infoEl && tag) infoEl.textContent = 'Latest release: ' + tag + ' — for Windows and macOS.';
+
+      const btn = document.getElementById('download-btn') as HTMLAnchorElement | null;
+      if (btn) {
+        btn.href = htmlUrl;
+        if (tag) btn.textContent = 'Download ' + tag + ' for Windows / macOS';
+      }
+
+      const footerVer = document.getElementById('footer-version');
+      if (footerVer && tag) footerVer.textContent = tag + ' — Free & Open Source';
+
+    } catch (err) {
+      console.warn('Could not fetch latest release:', err);
+      const infoEl = document.getElementById('release-info');
+      if (infoEl) infoEl.textContent = 'Currently in active alpha — for Windows and macOS.';
+    }
+  }
+  fetchLatestRelease();
+</script>

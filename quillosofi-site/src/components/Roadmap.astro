@@ -1,0 +1,88 @@
+---
+const columns = [
+  {
+    version: 'v0.6 — Alpha',
+    status: 'Shipped',
+    statusClass: 'status-shipped',
+    caption: 'Quillscript hub + Quillginate lifecycle',
+    active: false,
+    items: [
+      { text: 'Quillscript hub — single-editor architecture', state: 'done' },
+      { text: 'Tri-hub sync ring (canvas event bus)', state: 'done' },
+      { text: 'Sidebar drag-reorder, emoji picker, cover picker', state: 'done' },
+      { text: 'Hard page breaks (Mod-Enter) in Quillginate', state: 'done' },
+      { text: 'Spread mode toggle', state: 'done' },
+      { text: 'Real auto-updater with alpha + beta channels', state: 'done' },
+      { text: 'In-session install prompt with countdown', state: 'done' },
+    ],
+  },
+  {
+    version: 'v0.7.0',
+    status: 'In Progress',
+    statusClass: 'status-active',
+    caption: 'Quillginate from works to delightful',
+    active: true,
+    items: [
+      { text: 'Quillginate underflow reflow — production-grade', state: 'in-progress' },
+      { text: 'Spread-mode book-page-turn animation', state: '' },
+      { text: 'Hard page break QoL (right-click context menu)', state: '' },
+      { text: 'Per-Space settings (page size, default state)', state: '' },
+      { text: 'Sidebar polish — drag between Spaces, multi-select', state: '' },
+      { text: 'Cover picker expansion (24 swatches + dim slider)', state: '' },
+      { text: 'Update channel switcher (Stable / Alpha / Beta)', state: '' },
+    ],
+  },
+  {
+    version: 'v1.0.0',
+    status: 'Planned',
+    statusClass: 'status-planned',
+    caption: 'Quality-of-Life release',
+    active: false,
+    items: [
+      { text: 'Find & Replace with regex toggle', state: '' },
+      { text: 'Spellcheck — first-class, per-language', state: '' },
+      { text: 'Live word / character / page counters', state: '' },
+      { text: 'Track Changes & local revision history', state: '' },
+      { text: 'Comments and margin notes', state: '' },
+      { text: 'Cross-canvas search (Cmd+K)', state: '' },
+      { text: 'Keyboard shortcuts customizer', state: '' },
+      { text: 'Mobile / tablet read-only view', state: '' },
+    ],
+  },
+];
+---
+
+<section id="roadmap">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <p class="section-eyebrow">Where we&rsquo;re headed</p>
+      <h2>The roadmap.</h2>
+      <p class="section-sub">No VC pressure. No deadlines. Just shipping good software for writers, one version at a time.</p>
+      <div class="chalk-rule"></div>
+    </div>
+    <div class="roadmap-grid">
+      {columns.map((col) => (
+        <div class:list={['roadmap-col', 'reveal', { 'roadmap-active': col.active }]}>
+          <div class="roadmap-header">
+            <span class="roadmap-version">{col.version}</span>
+            <span class={`roadmap-status ${col.statusClass}`}>{col.status}</span>
+          </div>
+          <p class="roadmap-caption">{col.caption}</p>
+          <div class="chalk-rule" style="margin:12px 0"></div>
+          <ul class="roadmap-list">
+            {col.items.map((item) => (
+              <li class={item.state}>{item.text}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <p class="roadmap-note">Donate-not-Upgrade model. Ko-Fi covers domain + hosting. No Pro tier, ever.</p>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.roadmap-col').forEach((el, i) => {
+    (el as HTMLElement).dataset.delay = String(i * 120);
+  });
+</script>
