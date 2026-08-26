@@ -38,6 +38,25 @@ function genId() {
   return 'w_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
 }
 
+// Desktop only (window.quillosofi is injected by electron/preload.cjs).
+// No-ops in the web build — the browser's native spellchecker is left alone.
+function pushToNativeSpellchecker(word) {
+  try { window.quillosofi?.spellchecker?.addWord(word); } catch { /* ignore */ }
+}
+function removeFromNativeSpellchecker(word) {
+  try { window.quillosofi?.spellchecker?.removeWord(word); } catch { /* ignore */ }
+}
+
+/**
+ * Pushes every stored custom word into Chromium's native spellchecker
+ * dictionary. Call once on app/editor startup so words added before this
+ * bridge existed (or added on another device) still get honored.
+ */
+export function syncNativeSpellchecker() {
+  if (typeof window === 'undefined' || !window.quillosofi?.spellchecker) return;
+  readAll().forEach(e => pushToNativeSpellchecker(e.word));
+}
+
 export function listCustomWords() {
   return readAll();
 }
@@ -68,6 +87,7 @@ export function addCustomWord({ word, definition = '', category = '', is_pinned 
     created_date: new Date().toISOString(),
   };
   writeAll([entry, ...all]);
+  pushToNativeSpellchecker(entry.word);
   return entry;
 }
 
@@ -80,7 +100,9 @@ export function updateCustomWord(id, patch) {
 
 export function deleteCustomWord(id) {
   const all = readAll();
+  const removed = all.find(e => e.id === id);
   writeAll(all.filter(e => e.id !== id));
+  if (removed) removeFromNativeSpellchecker(removed.word);
 }
 
 export function deleteCustomWordByText(word) {
@@ -88,6 +110,7 @@ export function deleteCustomWordByText(word) {
   const w = word.trim().toLowerCase();
   const all = readAll();
   writeAll(all.filter(e => (e.word || '').toLowerCase() !== w));
+  removeFromNativeSpellchecker(word);
 }
 
 export function togglePin(id) {

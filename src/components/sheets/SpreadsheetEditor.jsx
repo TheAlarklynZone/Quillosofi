@@ -137,7 +137,7 @@ export default function MessageSpreadsheet({ message, sheet: sheetProp, onClose,
   const [selection, setSelection] = useState(null); // { r1,c1,r2,c2 } range
   const [editing, setEditing] = useState(null);
   const [editVal, setEditVal] = useState('');
-  const [autoSave, setAutoSave] = useState(false);
+  const [autoSave, setAutoSave] = useState(true);
   const [savedLabel, setSavedLabel] = useState('');
   const [fullscreen, setFullscreen] = useState(false);
   const [formulaBar, setFormulaBar] = useState('');

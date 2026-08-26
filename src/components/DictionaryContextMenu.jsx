@@ -17,7 +17,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { BookPlus, Sparkles, Pin } from 'lucide-react';
-import { addCustomWord, isCustomWord, togglePin as togglePinByText, listCustomWords } from '@/lib/customDict';
+import { addCustomWord, isCustomWord, togglePin as togglePinByText, listCustomWords, syncNativeSpellchecker } from '@/lib/customDict';
 import { suggest, checkWordSync, preloadSpellcheck } from '@/lib/spellcheck';
 
 function getWordAtPoint(x, y) {
@@ -54,8 +54,10 @@ export default function DictionaryContextMenu({ containerRef }) {
   const [toast, setToast] = useState('');
   const menuRef = useRef(null);
 
-  // Preload the spell dictionary on mount so suggestions don't lag.
-  useEffect(() => { preloadSpellcheck(); }, []);
+  // Preload the spell dictionary on mount so suggestions don't lag, and push
+  // the custom dictionary into Chromium's native spellchecker so pinned/added
+  // words stop showing up as native squiggly-underline typos.
+  useEffect(() => { preloadSpellcheck(); syncNativeSpellchecker(); }, []);
 
   useEffect(() => {
     const onContextMenu = async (e) => {

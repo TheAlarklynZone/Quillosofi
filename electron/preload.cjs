@@ -11,6 +11,14 @@ contextBridge.exposeInMainWorld('quillosofi', {
   openExternal: (url) => ipcRenderer.invoke('app:open-external', url),
   quit: () => ipcRenderer.send('app:quit'),
 
+  // Native spellchecker bridge — lets the custom dictionary (localStorage,
+  // renderer-side) suppress Chromium's built-in squiggly-underline spellcheck
+  // for words the user has added/pinned.
+  spellchecker: {
+    addWord: (word) => ipcRenderer.invoke('spellchecker:add-word', word),
+    removeWord: (word) => ipcRenderer.invoke('spellchecker:remove-word', word),
+  },
+
   // Auto-updater bridge
   updates: {
     status: () => ipcRenderer.invoke('updates:status'),

@@ -7,6 +7,7 @@ const {
   app,
   BrowserWindow,
   ipcMain,
+  session,
   shell,
   globalShortcut,
 } = require('electron');
@@ -326,6 +327,36 @@ ipcMain.handle('app:open-external', (_e, url) => {
 ipcMain.on('app:quit', () => {
   app.isQuitting = true;
   app.quit();
+});
+
+// =============================================================
+// IPC — spellchecker
+// =============================================================
+// Bridges Quillosofi's local custom dictionary (renderer-side, backed by
+// localStorage — see src/lib/customDict.js) into Chromium's native
+// spellchecker session. Without this, words pinned to the custom dictionary
+// still get flagged by the native squiggly-underline spellcheck, since that
+// checker has no visibility into the app's own word list.
+ipcMain.handle('spellchecker:add-word', (_e, word) => {
+  if (typeof word !== 'string' || !word.trim()) return false;
+  try {
+    session.defaultSession.addWordToSpellCheckerDictionary(word.trim());
+    return true;
+  } catch (e) {
+    console.warn('[spellchecker] addWord failed:', e && e.message);
+    return false;
+  }
+});
+
+ipcMain.handle('spellchecker:remove-word', (_e, word) => {
+  if (typeof word !== 'string' || !word.trim()) return false;
+  try {
+    session.defaultSession.removeWordFromSpellCheckerDictionary(word.trim());
+    return true;
+  } catch (e) {
+    console.warn('[spellchecker] removeWord failed:', e && e.message);
+    return false;
+  }
 });
 
 // =============================================================
